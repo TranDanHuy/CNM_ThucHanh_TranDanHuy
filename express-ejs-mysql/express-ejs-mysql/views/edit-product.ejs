@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sửa sản phẩm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h2 class="mb-4">Sửa sản phẩm</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" action="/edit/<%= product.id %>">
+                            <div class="mb-3">
+                                <label class="form-label">ID sản phẩm</label>
+                                <input type="text" class="form-control" value="<%= product.id %>" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Tên sản phẩm</label>
+                                <input type="text" name="name" class="form-control" value="<%= product.name %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Giá</label>
+                                <input type="number" name="price" class="form-control" value="<%= product.price %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số lượng</label>
+                                <input type="number" name="quantity" class="form-control" value="<%= product.quantity %>" required>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/" class="btn btn-secondary">Quay lại</a>
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
