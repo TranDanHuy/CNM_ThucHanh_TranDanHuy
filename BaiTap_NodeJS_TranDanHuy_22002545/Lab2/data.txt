@@ -1,0 +1,1 @@
+Chào bạn, đây là nội dung được ghi từ Node.js!
