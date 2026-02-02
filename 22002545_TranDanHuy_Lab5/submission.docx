@@ -1,0 +1,11 @@
+Submission for Lab - DynamoDB on Docker
+
+This Word file is a template. Please replace the placeholders below with actual screenshots:
+
+1) Screenshot: DynamoDB Local running in Docker (docker-compose ps / Docker Desktop view)
+
+2) Screenshot: Application running (http://localhost:3000 showing product list)
+
+3) GitHub repository link: https://github.com/yourusername/your-repo
+
+Instructions: Run `docker-compose up --build`, open the app, take screenshots, and insert them into this document.
