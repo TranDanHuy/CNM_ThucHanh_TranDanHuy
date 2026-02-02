@@ -1,0 +1,132 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">📋 Chi tiết Đơn hàng</h1>
+            <a href="/orders" class="btn btn-secondary">← Quay lại</a>
+        </div>
+
+        <div class="order-info-grid">
+            <div class="info-item">
+                <div class="info-label">Mã đơn hàng</div>
+                <div class="info-value"><code><%= order.orderId %></code></div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Trạng thái</div>
+                <div class="info-value">
+                    <% 
+                let statusClass = 'info';
+                let statusLabel = order.status;
+                if (order.status === 'pending') { statusClass = 'warning'; statusLabel = '⏳ Chờ xác nhận'; }
+                else if (order.status === 'confirmed') { statusClass = 'info'; statusLabel = '✅ Đã xác nhận'; }
+                else if (order.status === 'shipping') { statusClass = 'info'; statusLabel = '🚚 Đang giao'; }
+                else if (order.status === 'completed') { statusClass = 'success'; statusLabel = '✔️ Hoàn thành'; }
+                else if (order.status === 'cancelled') { statusClass = 'danger'; statusLabel = '❌ Đã hủy'; }
+                %>
+                        <span class="status-badge status-<%= statusClass %>"><%= statusLabel %></span>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Ngày đặt</div>
+                <div class="info-value">
+                    <%= new Date(order.createdAt).toLocaleString('vi-VN') %>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Tổng tiền</div>
+                <div class="info-value" style="color: var(--primary-color);">
+                    <%= order.totalAmount.toLocaleString('vi-VN') %>₫</div>
+            </div>
+        </div>
+
+        <h3>👤 Thông tin khách hàng</h3>
+        <div class="order-info-grid">
+            <div class="info-item">
+                <div class="info-label">Tên</div>
+                <div class="info-value">
+                    <%= order.customerName %>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value">
+                    <%= order.customerEmail %>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Số điện thoại</div>
+                <div class="info-value">
+                    <%= order.customerPhone %>
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-label">Địa chỉ</div>
+                <div class="info-value">
+                    <%= order.customerAddress %>
+                </div>
+            </div>
+        </div>
+
+        <h3>📦 Sản phẩm</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% items.forEach(item => { %>
+                        <tr>
+                            <td>
+                                <%= item.productName %>
+                            </td>
+                            <td>
+                                <%= item.price.toLocaleString('vi-VN') %>₫</td>
+                            <td>
+                                <%= item.quantity %>
+                            </td>
+                            <td><strong><%= item.subtotal.toLocaleString('vi-VN') %>₫</strong></td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+                <tfoot style="background: var(--light-color); font-weight: bold;">
+                    <tr>
+                        <td colspan="3" style="text-align: right; padding: 1rem;">TỔNG CỘNG:</td>
+                        <td style="color: var(--primary-color); font-size: 1.25rem; padding: 1rem;">
+                            <%= order.totalAmount.toLocaleString('vi-VN') %>₫
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <% if (isAdmin && order.status !== 'cancelled' && order.status !== 'completed') { %>
+            <div style="margin-top: 2rem;">
+                <h3>🔄 Cập nhật trạng thái</h3>
+                <form method="POST" action="/orders/<%= order.orderId %>/status" style="margin-top: 1rem;">
+                    <div class="d-flex gap-2 align-center">
+                        <select name="status" class="form-control" style="max-width: 300px;">
+                        <option value="pending" <%= order.status === 'pending' ? 'selected' : '' %>>⏳ Chờ xác nhận</option>
+                        <option value="confirmed" <%= order.status === 'confirmed' ? 'selected' : '' %>>✅ Đã xác nhận</option>
+                        <option value="shipping" <%= order.status === 'shipping' ? 'selected' : '' %>>🚚 Đang giao</option>
+                        <option value="completed" <%= order.status === 'completed' ? 'selected' : '' %>>✔️ Hoàn thành</option>
+                        <option value="cancelled" <%= order.status === 'cancelled' ? 'selected' : '' %>>❌ Hủy đơn</option>
+                    </select>
+                        <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+            <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

@@ -1,0 +1,65 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">📊 Lịch sử Thao tác</h1>
+            <a href="/products" class="btn btn-secondary">← Quay lại</a>
+        </div>
+
+        <% if (logs.length === 0) { %>
+            <div class="empty-state">
+                <h3>Chưa có lịch sử thao tác</h3>
+                <p>Mọi thao tác CREATE, UPDATE, DELETE sẽ được ghi lại tại đây</p>
+            </div>
+            <% } else { %>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Thời gian</th>
+                                <th>Hành động</th>
+                                <th>Sản phẩm ID</th>
+                                <th>User ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% logs.sort((a, b) => new Date(b.time) - new Date(a.time)).forEach(log => { %>
+                                <tr>
+                                    <td>
+                                        <%= new Date(log.time).toLocaleString('vi-VN') %>
+                                    </td>
+                                    <td>
+                                        <% if (log.action === 'CREATE') { %>
+                                            <span class="status-badge status-success">➕ Thêm mới</span>
+                                            <% } else if (log.action === 'UPDATE') { %>
+                                                <span class="status-badge status-info">✏️ Cập nhật</span>
+                                                <% } else if (log.action === 'DELETE') { %>
+                                                    <span class="status-badge status-danger">🗑️ Xóa</span>
+                                                    <% } %>
+                                    </td>
+                                    <td><code><%= log.productId %></code></td>
+                                    <td><code><%= log.userId %></code></td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 1rem; color: #6b7280;">
+                    Tổng: <strong><%= logs.length %></strong> bản ghi
+                </div>
+                <% } %>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 1rem;">💡 Giải thích Audit Log</h3>
+        <ul style="line-height: 2;">
+            <li><strong>Mục đích:</strong> Ghi lại mọi thay đổi dữ liệu để audit, truy vết</li>
+            <li><strong>CREATE:</strong> Khi thêm sản phẩm mới</li>
+            <li><strong>UPDATE:</strong> Khi cập nhật thông tin sản phẩm</li>
+            <li><strong>DELETE:</strong> Khi xóa sản phẩm (soft delete)</li>
+            <li><strong>Lợi ích:</strong> Phát hiện lỗi, truy vết hành vi, tuân thủ quy định</li>
+        </ul>
+    </div>
+
+    <%- include("../partials/footer") %>

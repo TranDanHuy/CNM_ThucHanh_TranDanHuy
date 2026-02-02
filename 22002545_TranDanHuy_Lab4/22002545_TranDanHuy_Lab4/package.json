@@ -1,0 +1,30 @@
+{
+    "name": "22002545_trandanhuy_lab4",
+    "version": "1.0.0",
+    "description": "Mini E-Commerce with DynamoDB",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Tran Dan Huy",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.682.0",
+        "@aws-sdk/client-s3": "^3.682.0",
+        "@aws-sdk/lib-dynamodb": "^3.682.0",
+        "bcrypt": "^5.1.1",
+        "connect-flash": "^0.1.1",
+        "ejs": "^4.0.1",
+        "express": "^5.2.1",
+        "express-session": "^1.18.1",
+        "multer": "^1.4.5-lts.1",
+        "uuid": "^13.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.9"
+    }
+}

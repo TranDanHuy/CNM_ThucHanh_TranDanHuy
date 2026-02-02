@@ -1,0 +1,71 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">🛒 Giỏ hàng của bạn</h1>
+            <a href="/shop" class="btn btn-secondary">← Tiếp tục mua sắm</a>
+        </div>
+
+        <% if (!cart || cart.length === 0) { %>
+            <div class="empty-state">
+                <h3>Giỏ hàng trống</h3>
+                <p>Bạn chưa thêm sản phẩm nào vào giỏ hàng</p>
+                <a href="/shop" class="btn btn-primary">🛍️ Mua sắm ngay</a>
+            </div>
+            <% } else { %>
+                <div class="table-container cart-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% cart.forEach(item => { %>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-center gap-2">
+                                            <% if (item.image) { %>
+                                                <img src="<%= item.image %>" alt="<%= item.name %>" class="cart-item-image">
+                                                <% } else { %>
+                                                    <div class="cart-item-image" style="display: flex; align-items: center; justify-content: center; background: var(--border-color);">📦</div>
+                                                    <% } %>
+                                                        <strong><%= item.name %></strong>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <%= item.price.toLocaleString('vi-VN') %>₫</td>
+                                    <td>
+                                        <%= item.quantity %>
+                                    </td>
+                                    <td><strong><%= (item.price * item.quantity).toLocaleString('vi-VN') %>₫</strong></td>
+                                    <td>
+                                        <a href="/shop/cart/remove/<%= item.productId %>" class="btn btn-sm btn-danger" onclick="return confirm('Xóa sản phẩm này?')">
+                                    🗑️ Xóa
+                                </a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="cart-summary">
+                    <h3>📊 Tổng kết</h3>
+                    <div class="cart-total">
+                        <span>TỔNG CỘNG:</span>
+                        <span><%= total.toLocaleString('vi-VN') %>₫</span>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <a href="/shop/checkout" class="btn btn-success btn-lg">🚀 Thanh toán</a>
+                </div>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

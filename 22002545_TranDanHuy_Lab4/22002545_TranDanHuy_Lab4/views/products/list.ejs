@@ -1,0 +1,145 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">📦 Quản lý Sản phẩm</h1>
+            <div class="btn-group">
+                <% if (isAdmin) { %>
+                    <a href="/products/logs" class="btn btn-secondary">📊 Lịch sử</a>
+                    <a href="/products/add" class="btn btn-primary">➕ Thêm sản phẩm</a>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <form method="GET" class="filter-form">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Tìm kiếm</label>
+                    <input type="text" name="keyword" class="form-control" value="<%= filters.keyword %>" placeholder="Tên sản phẩm...">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Danh mục</label>
+                    <select name="category" class="form-control">
+                    <option value="">Tất cả</option>
+                    <% categories.forEach(cat => { %>
+                        <option value="<%= cat.categoryId %>" 
+                                <%= filters.categoryId === cat.categoryId ? 'selected' : '' %>>
+                            <%= cat.name %>
+                        </option>
+                    <% }) %>
+                </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Giá từ</label>
+                    <input type="number" name="minPrice" class="form-control" value="<%= filters.minPrice %>" placeholder="0">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Giá đến</label>
+                    <input type="number" name="maxPrice" class="form-control" value="<%= filters.maxPrice %>" placeholder="999999">
+                </div>
+
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-primary">🔍 Lọc</button>
+                    <a href="/products" class="btn btn-secondary">Xóa lọc</a>
+                </div>
+            </form>
+        </div>
+
+        <% const productList = Array.isArray(products) ? products : (products && products.items) ? products.items : []; %>
+        <% if (productList.length === 0) { %>
+            <div class="empty-state">
+                <h3>Không tìm thấy sản phẩm</h3>
+                <p>Thử thay đổi bộ lọc hoặc thêm sản phẩm mới</p>
+                <% if (isAdmin) { %>
+                    <a href="/products/add" class="btn btn-primary">➕ Thêm sản phẩm</a>
+                <% } %>
+            </div>
+            <% } else { %>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 80px;">Ảnh</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Danh mục</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Trạng thái</th>
+                                <th style="width: 200px;">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% productList.forEach(p => { %>
+                                <tr>
+                                    <td>
+                                        <% if (p.url_image) { %>
+                                            <img src="<%= p.url_image %>" alt="<%= p.name %>" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                                            <% } else { %>
+                                                <div style="width: 60px; height: 60px; background: var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center;">📦</div>
+                                                <% } %>
+                                    </td>
+                                    <td><strong><%= p.name %></strong></td>
+                                    <td>
+                                        <% const category = categories.find(c => c.categoryId === p.categoryId); %>
+                                            <%= category ? category.name : '-' %>
+                                    </td>
+                                    <td><strong><%= p.price.toLocaleString('vi-VN') %>₫</strong></td>
+                                    <td>
+                                        <%= p.quantity %>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-<%= p.stockStatus.class %>">
+                                    <%= p.stockStatus.label %>
+                                </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="/products/edit/<%= p.id %>" class="btn btn-sm btn-primary">✏️ Sửa</a>
+                                            <a href="/products/delete/<%= p.id %>" class="btn btn-sm btn-danger" onclick="return confirm('Xóa sản phẩm <%= p.name %>?')">
+                                        🗑️ Xóa
+                                    </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 1rem; color: #6b7280; display:flex; justify-content:space-between; align-items:center;">
+                    <div>Tổng: <strong><%= pagination ? pagination.total : productList.length %></strong> sản phẩm</div>
+                    <% if (pagination && pagination.totalPages > 1) { %>
+                        <div class="pagination">
+                            <% const queryBase = [];
+                               if (filters.keyword) queryBase.push('keyword=' + encodeURIComponent(filters.keyword));
+                               if (filters.categoryId) queryBase.push('category=' + encodeURIComponent(filters.categoryId));
+                               if (filters.minPrice) queryBase.push('minPrice=' + encodeURIComponent(filters.minPrice));
+                               if (filters.maxPrice) queryBase.push('maxPrice=' + encodeURIComponent(filters.maxPrice));
+                               const base = queryBase.length ? ('?' + queryBase.join('&') + '&') : '?';
+                            %>
+                            <% if (pagination.page > 1) { %>
+                                <a class="page-link" href="/products<%= base %>page=<%= pagination.page - 1 %>&limit=<%= pagination.limit %>">‹ Prev</a>
+                            <% } %>
+
+                            <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+                                <% if (i === pagination.page) { %>
+                                    <span class="page current"><%= i %></span>
+                                <% } else { %>
+                                    <a class="page-link" href="/products<%= base %>page=<%= i %>&limit=<%= pagination.limit %>"><%= i %></a>
+                                <% } %>
+                            <% } %>
+
+                            <% if (pagination.page < pagination.totalPages) { %>
+                                <a class="page-link" href="/products<%= base %>page=<%= pagination.page + 1 %>&limit=<%= pagination.limit %>">Next ›</a>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

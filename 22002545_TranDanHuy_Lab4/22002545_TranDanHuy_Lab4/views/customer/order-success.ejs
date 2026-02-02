@@ -1,0 +1,66 @@
+<%- include("../partials/header") %>
+
+    <div class="card text-center">
+        <div style="font-size: 5rem; margin-bottom: 1rem;">✅</div>
+        <h1 style="color: var(--success-color); margin-bottom: 1rem;">Đặt hàng thành công!</h1>
+        <p style="font-size: 1.125rem; margin-bottom: 2rem;">
+            Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được ghi nhận.
+        </p>
+
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <h3>📋 Thông tin đơn hàng</h3>
+
+            <div class="order-info-grid">
+                <div class="info-item">
+                    <div class="info-label">Mã đơn hàng</div>
+                    <div class="info-value"><code><%= order.orderId %></code></div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Tổng tiền</div>
+                    <div class="info-value" style="color: var(--primary-color);">
+                        <%= order.totalAmount.toLocaleString('vi-VN') %>₫
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Khách hàng</div>
+                    <div class="info-value">
+                        <%= order.customerName %>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Email</div>
+                    <div class="info-value">
+                        <%= order.customerEmail %>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <h4>📦 Sản phẩm đã đặt</h4>
+                <% items.forEach(item => { %>
+                    <div style="display: flex; justify-content: space-between; padding: 0.75rem; border-bottom: 1px solid var(--border-color);">
+                        <div>
+                            <strong><%= item.productName %></strong>
+                            <small style="color: #6b7280;"> x<%= item.quantity %></small>
+                        </div>
+                        <div>
+                            <%= item.subtotal.toLocaleString('vi-VN') %>₫</div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+
+        <div class="alert alert-success" style="max-width: 600px; margin: 2rem auto;">
+            📧 Chúng tôi đã gửi email xác nhận đến <strong><%= order.customerEmail %></strong>
+        </div>
+
+        <div class="btn-group" style="justify-content: center; margin-top: 2rem;">
+            <a href="/shop" class="btn btn-primary">🛍️ Tiếp tục mua sắm</a>
+            <a href="/shop/track-order" class="btn btn-secondary">📦 Tra cứu đơn hàng</a>
+        </div>
+    </div>
+
+    <%- include("../partials/footer") %>

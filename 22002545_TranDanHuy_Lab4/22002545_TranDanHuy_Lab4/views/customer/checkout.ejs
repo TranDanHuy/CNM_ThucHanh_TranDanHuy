@@ -1,0 +1,68 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">🚀 Thanh toán</h1>
+            <a href="/shop/cart" class="btn btn-secondary">← Quay lại giỏ hàng</a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 2rem;">
+            <!-- Form thông tin -->
+            <div>
+                <h3>📝 Thông tin giao hàng</h3>
+                <form method="POST" action="/shop/checkout">
+                    <div class="form-group">
+                        <label class="form-label">Họ tên *</label>
+                        <input type="text" name="name" class="form-control" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email *</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Số điện thoại *</label>
+                        <input type="tel" name="phone" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Địa chỉ giao hàng *</label>
+                        <textarea name="address" class="form-control" rows="3" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg" style="width: 100%;">
+                    ✅ Xác nhận đặt hàng
+                </button>
+                </form>
+            </div>
+
+            <!-- Tóm tắt đơn hàng -->
+            <div>
+                <div class="cart-summary">
+                    <h3>📦 Đơn hàng của bạn</h3>
+
+                    <div style="margin: 1.5rem 0;">
+                        <% cart.forEach(item => { %>
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color);">
+                                <div>
+                                    <strong><%= item.name %></strong><br>
+                                    <small style="color: #6b7280;">x<%= item.quantity %></small>
+                                </div>
+                                <div>
+                                    <%= (item.price * item.quantity).toLocaleString('vi-VN') %>₫
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+
+                    <div class="cart-total">
+                        <span>TỔNG:</span>
+                        <span><%= total.toLocaleString('vi-VN') %>₫</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include("../partials/footer") %>

@@ -1,0 +1,48 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">➕ Thêm Sản phẩm</h1>
+            <a href="/products" class="btn btn-secondary">← Quay lại</a>
+        </div>
+
+        <form method="POST" action="/products/add" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="form-label">Tên sản phẩm *</label>
+                <input type="text" name="name" class="form-control" required autofocus placeholder="Nhập tên sản phẩm">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Danh mục</label>
+                <select name="categoryId" class="form-control">
+                <option value="">-- Chọn danh mục --</option>
+                <% categories.forEach(cat => { %>
+                    <option value="<%= cat.categoryId %>"><%= cat.name %></option>
+                <% }) %>
+            </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Giá (₫) *</label>
+                <input type="number" name="price" class="form-control" required min="0" placeholder="0">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Số lượng *</label>
+                <input type="number" name="quantity" class="form-control" required min="0" value="0">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Hình ảnh</label>
+                <input type="file" name="image" class="form-control" accept="image/*">
+                <small style="color: #6b7280;">Chỉ chấp nhận file ảnh (JPG, PNG, GIF). Tối đa 5MB.</small>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-success">✅ Thêm sản phẩm</button>
+                <a href="/products" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+
+    <%- include("../partials/footer") %>

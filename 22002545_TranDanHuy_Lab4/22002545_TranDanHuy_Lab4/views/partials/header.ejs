@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= typeof title !== 'undefined' ? title : 'Mini E-Commerce' %>
+    </title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/shop" class="nav-brand">
+                🛒 Mini E-Commerce
+            </a>
+
+            <ul class="nav-links">
+                <li>
+                    <form method="GET" action="<%= (user && (isAdmin || isStaff)) ? '/products' : '/shop' %>" style="display:flex; align-items:center; gap:0.5rem;">
+                        <input type="search" name="keyword" placeholder="Tìm sản phẩm..." class="form-control" style="width:220px; padding:0.5rem;" />
+                        <button class="btn btn-primary" style="padding:0.5rem 0.75rem;">🔍</button>
+                    </form>
+                </li>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <!-- Admin & Staff Menu -->
+                    <% if (isAdmin) { %>
+                        <li><a href="/products">📦 Sản phẩm</a></li>
+                        <li><a href="/categories">📂 Danh mục</a></li>
+                        <li><a href="/orders">📋 Đơn hàng</a></li>
+                        <li><a href="/products/logs">📊 Lịch sử</a></li>
+                        <% } else if (isStaff) { %>
+                            <li><a href="/products">📦 Xem sản phẩm</a></li>
+                            <li><a href="/orders">📋 Xem đơn hàng</a></li>
+                            <% } %>
+
+                                <li><a href="/shop">🏪 Shop</a></li>
+
+                                <li class="user-info">
+                                    <span class="badge"><%= user.role === 'admin' ? '👑 Admin' : '👤 Staff' %></span>
+                                    <span><%= user.username %></span>
+                                    <a href="/auth/logout">Đăng xuất</a>
+                                </li>
+                                <% } else { %>
+                                    <!-- Public Menu -->
+                                    <li><a href="/shop">🏪 Shop</a></li>
+                                    <li><a href="/shop/cart">🛒 Giỏ hàng</a></li>
+                                    <li><a href="/shop/track-order">📦 Tra cứu đơn</a></li>
+                                    <li><a href="/auth/login">🔐 Đăng nhập</a></li>
+                                    <li><a href="/auth/register">📝 Đăng ký</a></li>
+                                    <% } %>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Flash Messages -->
+        <% if (typeof success !== 'undefined' && success.length > 0) { %>
+            <div class="flash-messages">
+                <% success.forEach(msg => { %>
+                    <div class="alert alert-success">✅
+                        <%= msg %>
+                    </div>
+                    <% }) %>
+            </div>
+            <% } %>
+
+                <% if (typeof error !== 'undefined' && error.length > 0) { %>
+                    <div class="flash-messages">
+                        <% error.forEach(msg => { %>
+                            <div class="alert alert-error">❌
+                                <%= msg %>
+                            </div>
+                            <% }) %>
+                    </div>
+                    <% } %>

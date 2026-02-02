@@ -1,0 +1,65 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">📋 Quản lý Đơn hàng</h1>
+        </div>
+
+        <% if (orders.length === 0) { %>
+            <div class="empty-state">
+                <h3>Chưa có đơn hàng nào</h3>
+                <p>Đơn hàng từ khách hàng sẽ hiển thị tại đây</p>
+            </div>
+            <% } else { %>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày đặt</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(order => { %>
+                                <tr>
+                                    <td><code><%= order.orderId.substring(0, 8) %>...</code></td>
+                                    <td>
+                                        <strong><%= order.customerName %></strong><br>
+                                        <small style="color: #6b7280;"><%= order.customerEmail %></small>
+                                    </td>
+                                    <td><strong><%= order.totalAmount.toLocaleString('vi-VN') %>₫</strong></td>
+                                    <td>
+                                        <% 
+                                let statusClass = 'info';
+                                let statusLabel = order.status;
+                                if (order.status === 'pending') { statusClass = 'warning'; statusLabel = '⏳ Chờ xác nhận'; }
+                                else if (order.status === 'confirmed') { statusClass = 'info'; statusLabel = '✅ Đã xác nhận'; }
+                                else if (order.status === 'shipping') { statusClass = 'info'; statusLabel = '🚚 Đang giao'; }
+                                else if (order.status === 'completed') { statusClass = 'success'; statusLabel = '✔️ Hoàn thành'; }
+                                else if (order.status === 'cancelled') { statusClass = 'danger'; statusLabel = '❌ Đã hủy'; }
+                                %>
+                                            <span class="status-badge status-<%= statusClass %>"><%= statusLabel %></span>
+                                    </td>
+                                    <td>
+                                        <%= new Date(order.createdAt).toLocaleString('vi-VN') %>
+                                    </td>
+                                    <td>
+                                        <a href="/orders/<%= order.orderId %>" class="btn btn-sm btn-primary">👁️ Chi tiết</a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 1rem; color: #6b7280;">
+                    Tổng: <strong><%= orders.length %></strong> đơn hàng
+                </div>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

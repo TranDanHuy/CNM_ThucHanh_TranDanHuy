@@ -1,0 +1,76 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">📦 Tra cứu đơn hàng</h1>
+        </div>
+
+        <div style="max-width: 500px; margin: 0 auto;">
+            <p style="text-align: center; margin-bottom: 2rem; color: #6b7280;">
+                Nhập email để xem tất cả đơn hàng của bạn
+            </p>
+
+            <form method="POST" action="/shop/track-order">
+                <div class="form-group">
+                    <label class="form-label">Email của bạn</label>
+                    <input type="email" name="email" class="form-control" value="<%= typeof email !== 'undefined' ? email : '' %>" required autofocus>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                🔍 Tra cứu
+            </button>
+            </form>
+        </div>
+
+        <% if (typeof orders !== 'undefined' && orders) { %>
+            <% if (orders.length === 0) { %>
+                <div class="empty-state">
+                    <h3>Không tìm thấy đơn hàng</h3>
+                    <p>Email này chưa có đơn hàng nào</p>
+                </div>
+                <% } else { %>
+                    <div style="margin-top: 3rem;">
+                        <h3>📋 Đơn hàng của bạn (
+                            <%= orders.length %>)</h3>
+
+                        <div class="table-container" style="margin-top: 1rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Mã đơn</th>
+                                        <th>Ngày đặt</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).forEach(order => { %>
+                                        <tr>
+                                            <td><code><%= order.orderId.substring(0, 8) %>...</code></td>
+                                            <td>
+                                                <%= new Date(order.createdAt).toLocaleDateString('vi-VN') %>
+                                            </td>
+                                            <td><strong><%= order.totalAmount.toLocaleString('vi-VN') %>₫</strong></td>
+                                            <td>
+                                                <% 
+                                        let statusClass = 'info';
+                                        let statusLabel = order.status;
+                                        if (order.status === 'pending') { statusClass = 'warning'; statusLabel = '⏳ Chờ xác nhận'; }
+                                        else if (order.status === 'confirmed') { statusClass = 'info'; statusLabel = '✅ Đã xác nhận'; }
+                                        else if (order.status === 'shipping') { statusClass = 'info'; statusLabel = '🚚 Đang giao'; }
+                                        else if (order.status === 'completed') { statusClass = 'success'; statusLabel = '✔️ Hoàn thành'; }
+                                        else if (order.status === 'cancelled') { statusClass = 'danger'; statusLabel = '❌ Đã hủy'; }
+                                        %>
+                                                    <span class="status-badge status-<%= statusClass %>"><%= statusLabel %></span>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <% } %>
+                        <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

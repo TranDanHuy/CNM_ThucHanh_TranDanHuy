@@ -1,0 +1,48 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">📂 Quản lý Danh mục</h1>
+            <a href="/categories/add" class="btn btn-primary">➕ Thêm danh mục</a>
+        </div>
+
+        <% if (categories.length === 0) { %>
+            <div class="empty-state">
+                <h3>Chưa có danh mục nào</h3>
+                <p>Bắt đầu bằng cách thêm danh mục đầu tiên</p>
+                <a href="/categories/add" class="btn btn-primary">➕ Thêm danh mục</a>
+            </div>
+            <% } else { %>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tên danh mục</th>
+                                <th>Mô tả</th>
+                                <th style="width: 200px;">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% categories.forEach(cat => { %>
+                                <tr>
+                                    <td><strong><%= cat.name %></strong></td>
+                                    <td>
+                                        <%= cat.description || '-' %>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="/categories/edit/<%= cat.categoryId %>" class="btn btn-sm btn-primary">✏️ Sửa</a>
+                                            <a href="/categories/delete/<%= cat.categoryId %>" class="btn btn-sm btn-danger" onclick="return confirm('Xóa danh mục này?\n\n⚠️ Sản phẩm thuộc danh mục này sẽ không bị xóa.')">
+                                        🗑️ Xóa
+                                    </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

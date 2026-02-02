@@ -1,0 +1,57 @@
+<%- include("../partials/header") %>
+
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">
+                <% if (product.url_image) { %>
+                    <img src="<%= product.url_image %>" alt="<%= product.name %>" style="width: 100%; max-width: 500px; border-radius: 12px; margin-bottom: 1.5rem;">
+                    <% } %>
+            </h1>
+        </div>
+
+        <h1 style="font-size: 2rem; margin-bottom: 1rem;">
+            <%= product.name %>
+        </h1>
+
+        <div class="product-price" style="font-size: 2rem; margin-bottom: 1rem;">
+            <%= product.price.toLocaleString('vi-VN') %>₫
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+            <span class="status-badge status-<%= product.stockStatus.class %>" style="font-size: 1rem; padding: 0.5rem 1rem;">
+            <%= product.stockStatus.label %> 
+            <% if (product.quantity > 0) { %>
+                (<%= product.quantity %> sản phẩm)
+            <% } %>
+        </span>
+        </div>
+
+        <% if (product.quantity > 0) { %>
+            <% if (!isStaff) { %>
+                <form method="POST" action="/shop/cart/add">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+
+                    <div class="form-group" style="max-width: 200px;">
+                        <label class="form-label">Số lượng</label>
+                        <input type="number" name="quantity" class="form-control" value="1" min="1" max="<%= product.quantity %>" required>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-success btn-lg">🛒 Thêm vào giỏ</button>
+                        <a href="/shop" class="btn btn-secondary">← Quay lại</a>
+                    </div>
+                </form>
+            <% } else { %>
+                <div class="btn-group">
+                    <a href="/shop" class="btn btn-secondary">← Quay lại</a>
+                </div>
+            <% } %>
+        <% } else { %>
+                <div class="alert alert-error">
+                    ❌ Sản phẩm hiện tại hết hàng
+                </div>
+                <a href="/shop" class="btn btn-secondary">← Quay lại</a>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>
