@@ -1,0 +1,73 @@
+<style>
+body{
+    font-family: Arial;
+    background:#f5f6fa;
+    padding:30px;
+}
+
+.container{
+    width:450px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+h1{
+    text-align:center;
+}
+
+input{
+    width:100%;
+    padding:8px;
+    margin:6px 0 15px;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:#3498db;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+img{
+    margin-bottom:10px;
+    border-radius:5px;
+}
+</style>
+
+<div class="container">
+
+<h1><%= title %></h1>
+
+<form action="<%= action %>" method="POST" enctype="multipart/form-data">
+
+<% if(product){ %>
+<input type="hidden" name="id" value="<%= product.id %>">
+<% } %>
+
+<label>Name</label>
+<input type="text" name="name" value="<%= product ? product.name : '' %>">
+
+<label>Price</label>
+<input type="number" name="price" value="<%= product ? product.price : '' %>">
+
+<label>Quantity</label>
+<input type="number" name="quantity" value="<%= product ? product.quantity : '' %>">
+
+<% if(product && product.image){ %>
+<img src="<%= product.image %>" width="120">
+<% } %>
+
+<label>Change image</label>
+<input type="file" name="image">
+
+<button type="submit"><%= button %></button>
+
+</form>
+
+</div>

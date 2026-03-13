@@ -1,0 +1,24 @@
+{
+  "name": "TranDanHuy_22002545_CNM_Tuan10",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1007.0",
+    "@aws-sdk/client-s3": "^3.1007.0",
+    "@aws-sdk/lib-dynamodb": "^3.1007.0",
+    "body-parser": "^2.2.2",
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "multer-s3": "^3.0.1",
+    "uuid": "^8.3.2"
+  }
+}
